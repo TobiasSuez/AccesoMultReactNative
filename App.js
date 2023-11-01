@@ -1,45 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   View,
   Button,
   ActivityIndicator,
 } from 'react-native';
 import TrackPlayer from 'react-native-track-player';
-import { setupPlayer, addTracks } from './trackPlayer/trackPlayerServices';
+import { setupPlayer, addTrack } from './trackPlayer/musicController';
 
 function App() {
 
-  const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [play, setPlay] = useState(false);
 
   useEffect(() => {
     async function setup() {
       let isSetup = await setupPlayer();
-
-      const queue = await TrackPlayer.getQueue();
-      if(isSetup && queue.length <= 0) {
-        await addTracks();
-      }
-
-      setIsPlayerReady(isSetup);
+      await addTrack();
+      setPlay(isSetup);
     }
-
     setup();
   }, []);
 
-  if(!isPlayerReady) {
+  if(!play) {
     return (
-      <SafeAreaView style={styles.container}>
-        <ActivityIndicator size="large" color="#bbb"/>
-      </SafeAreaView>
+        <ActivityIndicator/>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Button title="Play" color="#777" onPress={() => TrackPlayer.play()}/>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <Button 
+        title="Play" 
+        onPress={() => TrackPlayer.play()}  
+      />
+      <Button 
+        title="pause" 
+        color='#000'
+        onPress={() => TrackPlayer.pause()} 
+      />
+    </View>
   );
 }
 
@@ -48,8 +47,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20,
-    backgroundColor: '#112'
-  },
+    backgroundColor: '#f8f8f8'
+  }
 });
 
 export default App;
