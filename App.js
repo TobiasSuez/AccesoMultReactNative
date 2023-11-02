@@ -1,43 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import {
-  StyleSheet,
-  View,
-  Button,
-  ActivityIndicator,
-} from 'react-native';
-import TrackPlayer from 'react-native-track-player';
-import { setupPlayer, addTrack } from './trackPlayer/musicController';
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import SoundPlayer from './SoundPlayer';
 
-function App() {
-
-  const [play, setPlay] = useState(false);
-
-  useEffect(() => {
-    async function setup() {
-      let isSetup = await setupPlayer();
-      await addTrack();
-      setPlay(isSetup);
-    }
-    setup();
-  }, []);
-
-  if(!play) {
-    return (
-        <ActivityIndicator/>
-    );
-  }
-
+export default function App() {
   return (
     <View style={styles.container}>
-      <Button 
-        title="Play" 
-        onPress={() => TrackPlayer.play()}  
-      />
-      <Button 
-        title="pause" 
-        color='#000'
-        onPress={() => TrackPlayer.pause()} 
-      />
+      <SoundPlayer />
     </View>
   );
 }
@@ -46,9 +14,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#f8f8f8'
-  }
+    alignItems: 'center',
+  },
 });
-
-export default App;
